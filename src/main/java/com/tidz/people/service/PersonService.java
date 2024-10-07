@@ -26,4 +26,8 @@ public class PersonService {
     public List<Person> getAllPersons() {
         return repository.findAll();
     }
+
+    public Person getPersonById(Long id) {
+        return repository.findById(id).orElseThrow(() -> new RuntimeException("Error"));
+    }
 }
