@@ -15,6 +15,7 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 public class PersonServiceTest {
 
@@ -69,5 +70,25 @@ public class PersonServiceTest {
         Assertions.assertEquals("John Doe", result.get(0).getName());
         Assertions.assertEquals("Jane Doe", result.get(1).getName());
         Mockito.verify(personRepository, Mockito.times(1)).findAll();
+    }
+
+    @Test
+    void getPersonByIdShouldReturnAPerson() {
+        Person person = new Person();
+        person.setId(1L);
+        person.setName("John Doe");
+        person.setAge(30);
+        person.setProfession("Engineer");
+
+        Long id = 1L;
+        Mockito.when(personRepository.findById(id)).thenReturn(Optional.of(person));
+
+        Person personFound = personService.getPersonById(id);
+
+        Assertions.assertNotNull(personFound);
+        Assertions.assertEquals("John Doe", personFound.getName());
+        Assertions.assertEquals(30, personFound.getAge());
+        Assertions.assertEquals("Engineer", personFound.getProfession());
+        Mockito.verify(personRepository, Mockito.times(1)).findById(id);
     }
 }
