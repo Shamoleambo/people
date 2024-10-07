@@ -1,5 +1,6 @@
 package com.tidz.people.service;
 
+import com.tidz.people.ResourceNotFoundException;
 import com.tidz.people.model.Person;
 import com.tidz.people.repository.PersonRepository;
 import jakarta.transaction.Transactional;
@@ -28,6 +29,6 @@ public class PersonService {
     }
 
     public Person getPersonById(Long id) {
-        return repository.findById(id).orElseThrow(() -> new RuntimeException("Error"));
+        return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Person with id " + id + " not found"));
     }
 }
