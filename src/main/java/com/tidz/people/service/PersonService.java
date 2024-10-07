@@ -2,6 +2,7 @@ package com.tidz.people.service;
 
 import com.tidz.people.model.Person;
 import com.tidz.people.repository.PersonRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,7 @@ public class PersonService {
         this.repository = repository;
     }
 
+    @Transactional
     public Person save(Person person) {
         return repository.save(person);
     }
