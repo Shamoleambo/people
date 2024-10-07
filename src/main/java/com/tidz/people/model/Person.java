@@ -3,6 +3,7 @@ package com.tidz.people.model;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "persons")
 public class Person {
 
     @Id
