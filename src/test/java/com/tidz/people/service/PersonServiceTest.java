@@ -7,10 +7,14 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import org.junit.jupiter.api.Assertions;
+
+import org.mockito.Mockito;
 
 import org.mockito.MockitoAnnotations;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class PersonServiceTest {
 
@@ -32,14 +36,38 @@ public class PersonServiceTest {
         person.setAge(30);
         person.setProfession("Engineer");
 
-        when(personRepository.save(any(Person.class))).thenReturn(person);
+        Mockito.when(personRepository.save(Mockito.any(Person.class))).thenReturn(person);
 
         Person savedPerson = personService.save(person);
 
-        assertNotNull(savedPerson);
-        assertEquals("John Doe", savedPerson.getName());
-        assertEquals(30, savedPerson.getAge());
-        assertEquals("Engineer", savedPerson.getProfession());
-        verify(personRepository, times(1)).save(person);
+        Assertions.assertNotNull(savedPerson);
+        Assertions.assertEquals("John Doe", savedPerson.getName());
+        Assertions.assertEquals(30, savedPerson.getAge());
+        Assertions.assertEquals("Engineer", savedPerson.getProfession());
+        Mockito.verify(personRepository, Mockito.times(1)).save(person);
+    }
+
+    @Test
+    void getAllPeopleShouldReturnAListOfPeople() {
+        Person person1 = new Person();
+        person1.setName("John Doe");
+        person1.setAge(30);
+        person1.setProfession("Engineer");
+
+        Person person2 = new Person();
+        person2.setName("Jane Doe");
+        person2.setAge(28);
+        person2.setProfession("Doctor");
+
+        List<Person> people = Arrays.asList(person1, person2);
+        Mockito.when(personRepository.findAll()).thenReturn(people);
+
+        List<Person> result = personService.getAllPersons();
+
+        Assertions.assertNotNull(result);
+        Assertions.assertEquals(2, result.size());
+        Assertions.assertEquals("John Doe", result.get(0).getName());
+        Assertions.assertEquals("Jane Doe", result.get(1).getName());
+        Mockito.verify(personRepository, Mockito.times(1)).findAll();
     }
 }
