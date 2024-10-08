@@ -91,4 +91,32 @@ public class PersonServiceTest {
         Assertions.assertEquals("Engineer", personFound.getProfession());
         Mockito.verify(personRepository, Mockito.times(1)).findById(id);
     }
+
+    @Test
+    void updateShouldUpdateThePersonWithTheProvidedId() {
+        Person person = new Person();
+        person.setName("John Doe");
+        person.setAge(30);
+        person.setProfession("Engineer");
+
+        Person updatedPerson = new Person();
+        updatedPerson.setName("John Smith");
+        updatedPerson.setAge(35);
+        updatedPerson.setProfession("Architect");
+
+        Mockito.when(personRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(person));
+        Mockito.when(personRepository.save(Mockito.any(Person.class))).thenReturn(updatedPerson);
+
+        Long id = 1L;
+        Person result = personService.update(id, updatedPerson);
+
+        Assertions.assertNotNull(result);
+        Assertions.assertEquals("John Smith", result.getName());
+        Assertions.assertEquals(35, result.getAge());
+        Assertions.assertEquals("Architect", result.getProfession());
+
+        Mockito.verify(personRepository, Mockito.times(1)).findById(id);
+        Mockito.verify(personRepository, Mockito.times(1)).save(person);
+
+    }
 }
