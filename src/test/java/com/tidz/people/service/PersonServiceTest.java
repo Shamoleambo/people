@@ -1,6 +1,6 @@
 package com.tidz.people.service;
 
-import com.tidz.people.ResourceNotFoundException;
+import com.tidz.people.exceptions.ResourceNotFoundException;
 import com.tidz.people.model.Person;
 import com.tidz.people.repository.PersonRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,7 +14,6 @@ import org.mockito.Mockito;
 
 import org.mockito.MockitoAnnotations;
 
-import java.io.IOError;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;

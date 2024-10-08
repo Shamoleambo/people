@@ -1,4 +1,4 @@
-package com.tidz.people;
+package com.tidz.people.exceptions;
 
 public class ResourceNotFoundException extends RuntimeException {
 

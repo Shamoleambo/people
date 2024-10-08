@@ -1,6 +1,6 @@
 package com.tidz.people.service;
 
-import com.tidz.people.ResourceNotFoundException;
+import com.tidz.people.exceptions.ResourceNotFoundException;
 import com.tidz.people.model.Person;
 import com.tidz.people.repository.PersonRepository;
 import jakarta.transaction.Transactional;
