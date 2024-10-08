@@ -1,5 +1,6 @@
 package com.tidz.people.service;
 
+import com.tidz.people.ResourceNotFoundException;
 import com.tidz.people.model.Person;
 import com.tidz.people.repository.PersonRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,6 +14,7 @@ import org.mockito.Mockito;
 
 import org.mockito.MockitoAnnotations;
 
+import java.io.IOError;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -132,5 +134,12 @@ public class PersonServiceTest {
 
         Mockito.verify(personRepository, Mockito.times(1)).findById(id);
         Mockito.verify(personRepository, Mockito.times(1)).delete(person);
+    }
+
+    @Test
+    void shouldThrowAnErrorIfPeronIsNotFound() {
+        Mockito.when(personRepository.findById(Mockito.anyLong())).thenReturn(Optional.empty());
+
+        Assertions.assertThrows(ResourceNotFoundException.class, () -> personService.getPersonById(1L));
     }
 }
