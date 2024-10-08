@@ -77,4 +77,21 @@ public class PersonControllerTest {
 
         Mockito.verify(service, Mockito.times(1)).getAllPersons();
     }
+
+    @Test
+    void getPersonByIdShouldReturnAPersonWithThatId() throws Exception {
+        Long id = 1L;
+        Person person = new Person(id, "John Doe", 30, "Engineer");
+
+        Mockito.when(service.getPersonById(id)).thenReturn(person);
+
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/people/{id}", id).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.body", Matchers.notNullValue()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.body.name", Matchers.is("John Doe")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.body.age", Matchers.is(30)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.body.profession", Matchers.is("Engineer")));
+
+        Mockito.verify(service, Mockito.times(1)).getPersonById(id);
+    }
 }
