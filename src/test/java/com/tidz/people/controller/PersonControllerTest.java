@@ -1,5 +1,6 @@
 package com.tidz.people.controller;
 
+import com.tidz.people.exceptions.ResourceNotFoundException;
 import com.tidz.people.model.Person;
 import com.tidz.people.service.PersonService;
 import org.hamcrest.Matchers;
@@ -76,6 +77,16 @@ public class PersonControllerTest {
 
 
         Mockito.verify(service, Mockito.times(1)).getAllPersons();
+    }
+
+    @Test
+    void getPersonByIdShouldReturnNotFoundError() throws Exception {
+        Long id = 1L;
+
+        Mockito.when(service.getPersonById(id)).thenThrow(new ResourceNotFoundException("Person with id " + id + " not found"));
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/people/{id}", id).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message", Matchers.equalTo("Person with id " + id + " not found")));
     }
 
     @Test
