@@ -32,4 +32,9 @@ public class PersonController {
         return ResponseEntity.ok(new ApiResponse("Success", people));
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponse> getPersonById(@PathVariable("id") Long id) {
+        Person person = service.getPersonById(id);
+        return ResponseEntity.ok(new ApiResponse("Success", person));
+    }
 }
