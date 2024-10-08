@@ -15,6 +15,9 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class PersonControllerTest {
 
     private MockMvc mockMvc;
@@ -46,5 +49,23 @@ public class PersonControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.body.profession", Matchers.equalToIgnoringCase("engineer")));
 
         Mockito.verify(service, Mockito.times(1)).save(Mockito.any(Person.class));
+    }
+
+    @Test
+    void getAllShouldReturnAllPersons() throws Exception {
+        Person person1 = new Person(1L, "John Doe", 30, "Engineer");
+        Person person2 = new Person(2L, "Mary Sue", 22, "Programmer");
+        Person person3 = new Person(3L, "Gary Thumb", 26, "Assistant");
+        List<Person> people = Arrays.asList(person1, person2, person3);
+
+        Mockito.when(service.getAllPersons()).thenReturn(people);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/people").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.body", Matchers.notNullValue()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.body", Matchers.iterableWithSize(3)));
+//                .andExpect(MockMvcResultMatchers.jsonPath("$.body"))
+
+        Mockito.verify(service, Mockito.times(1)).getAllPersons();
     }
 }
