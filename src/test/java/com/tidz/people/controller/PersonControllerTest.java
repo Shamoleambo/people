@@ -63,8 +63,17 @@ public class PersonControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/people").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.body", Matchers.notNullValue()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.body", Matchers.iterableWithSize(3)));
-//                .andExpect(MockMvcResultMatchers.jsonPath("$.body"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.body", Matchers.hasSize(3)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.body[0].name", Matchers.is("John Doe")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.body[0].age", Matchers.is(30)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.body[0].profession", Matchers.equalToIgnoringCase("Engineer")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.body[1].name", Matchers.is("Mary Sue")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.body[1].age", Matchers.is(22)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.body[1].profession", Matchers.equalToIgnoringCase("programmer")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.body[2].name", Matchers.is("Gary Thumb")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.body[2].age", Matchers.is(26)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.body[2].profession", Matchers.equalToIgnoringCase("assistant")));
+
 
         Mockito.verify(service, Mockito.times(1)).getAllPersons();
     }
