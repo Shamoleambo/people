@@ -41,4 +41,12 @@ public class PersonService {
             return repository.save(person);
         }).orElseThrow(() -> new ResourceNotFoundException("Person with id " + id + " not found"));
     }
+
+    @Transactional
+    public void delete(Long id) {
+        repository.findById(id).ifPresentOrElse(repository::delete,
+                () -> {
+                    throw new ResourceNotFoundException("Person with id " + id + " not found");
+                });
+    }
 }
