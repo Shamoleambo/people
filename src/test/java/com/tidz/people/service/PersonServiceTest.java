@@ -153,4 +153,13 @@ public class PersonServiceTest {
             personService.update(1L, updatedPerson);
         });
     }
+
+    @Test
+    void shouldThrowAnErrorIfPersonToBeDeletedIdNotFound() {
+        Mockito.when(personRepository.findById(Mockito.anyLong())).thenReturn(Optional.empty());
+
+        Assertions.assertThrows(ResourceNotFoundException.class, () -> {
+            personService.delete(1L);
+        });
+    }
 }
