@@ -119,4 +119,18 @@ public class PersonServiceTest {
         Mockito.verify(personRepository, Mockito.times(1)).save(person);
 
     }
+
+    @Test
+    void deleteShouldDeleteThePersonWithTheProvidedId() {
+        Long id = 1L;
+        Person person = new Person(id, "John Doe", 30, "Engineer");
+
+        Mockito.when(personRepository.findById(id)).thenReturn(Optional.of(person));
+        Mockito.doNothing().when(personRepository).delete(person);
+
+        personService.delete(id);
+
+        Mockito.verify(personRepository, Mockito.times(1)).findById(id);
+        Mockito.verify(personRepository, Mockito.times(1)).delete(person);
+    }
 }
