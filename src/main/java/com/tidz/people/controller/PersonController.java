@@ -5,10 +5,9 @@ import com.tidz.people.response.ApiResponse;
 import com.tidz.people.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/people")
@@ -27,5 +26,10 @@ public class PersonController {
         return ResponseEntity.ok(new ApiResponse("Success", savedPerson));
     }
 
+    @GetMapping("")
+    public ResponseEntity<ApiResponse> getAllPeople() {
+        List<Person> people = service.getAllPersons();
+        return ResponseEntity.ok(new ApiResponse("Success", people));
+    }
 
 }
