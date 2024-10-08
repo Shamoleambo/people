@@ -1,9 +1,11 @@
 package com.tidz.people.controller;
 
+import com.tidz.people.exceptions.ResourceNotFoundException;
 import com.tidz.people.model.Person;
 import com.tidz.people.response.ApiResponse;
 import com.tidz.people.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,7 +36,12 @@ public class PersonController {
 
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse> getPersonById(@PathVariable("id") Long id) {
-        Person person = service.getPersonById(id);
-        return ResponseEntity.ok(new ApiResponse("Success", person));
+        try {
+            Person person = service.getPersonById(id);
+            return ResponseEntity.ok(new ApiResponse("Success", person));
+
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
+        }
     }
 }
