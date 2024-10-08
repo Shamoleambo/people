@@ -31,4 +31,14 @@ public class PersonService {
     public Person getPersonById(Long id) {
         return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Person with id " + id + " not found"));
     }
+
+    @Transactional
+    public Person update(Long id, Person updatedPerson) {
+        return repository.findById(id).map(person -> {
+            person.setName(updatedPerson.getName());
+            person.setAge(updatedPerson.getAge());
+            person.setProfession(updatedPerson.getProfession());
+            return repository.save(person);
+        }).orElseThrow(() -> new ResourceNotFoundException("Person with id " + id + " not found"));
+    }
 }
