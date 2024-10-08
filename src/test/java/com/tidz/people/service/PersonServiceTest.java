@@ -142,4 +142,15 @@ public class PersonServiceTest {
 
         Assertions.assertThrows(ResourceNotFoundException.class, () -> personService.getPersonById(1L));
     }
+
+    @Test
+    void shouldThrowAnErrorIfPersonToBeUpdatedIsNotFound() {
+        Person updatedPerson = new Person(1L, "John Doe", 35, "Engineer");
+
+        Mockito.when(personRepository.findById(Mockito.anyLong())).thenReturn(Optional.empty());
+
+        Assertions.assertThrows(ResourceNotFoundException.class, () -> {
+            personService.update(1L, updatedPerson);
+        });
+    }
 }
