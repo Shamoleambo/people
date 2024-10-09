@@ -48,8 +48,8 @@ public class PersonController {
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse> updatePerson(@PathVariable("id") Long id, @RequestBody Person person) {
         try {
-            service.update(id, person);
-            return null;
+            Person updatedPerson = service.update(id, person);
+            return ResponseEntity.ok(new ApiResponse("Success", updatedPerson));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }
