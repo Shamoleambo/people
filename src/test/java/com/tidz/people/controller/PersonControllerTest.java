@@ -148,4 +148,13 @@ public class PersonControllerTest {
 
         Mockito.verify(service, Mockito.times(1)).delete(Mockito.anyLong());
     }
+
+    @Test
+    void deletePersonShouldReturn200() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/people/1"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message", Matchers.equalTo("Person deleted")));
+
+        Mockito.verify(service, Mockito.times(1)).delete(Mockito.anyLong());
+    }
 }
