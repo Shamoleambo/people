@@ -137,4 +137,15 @@ public class PersonControllerTest {
 
         Mockito.verify(service, Mockito.times(1)).update(Mockito.anyLong(), Mockito.any(Person.class));
     }
+
+    @Test
+    void deletePersonShouldReturn404IfPersonIsNotFound() throws Exception {
+        Mockito.doThrow(new ResourceNotFoundException("Delete person error")).when(service).delete(Mockito.anyLong());
+
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/people/1"))
+                .andExpect(MockMvcResultMatchers.status().isNotFound())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message", Matchers.equalTo("Delete person error")));
+
+        Mockito.verify(service, Mockito.times(1)).delete(Mockito.anyLong());
+    }
 }
