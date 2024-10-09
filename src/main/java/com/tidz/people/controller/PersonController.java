@@ -44,4 +44,14 @@ public class PersonController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ApiResponse> updatePerson(@PathVariable("id") Long id, @RequestBody Person person) {
+        try {
+            service.update(id, person);
+            return null;
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
+        }
+    }
 }
