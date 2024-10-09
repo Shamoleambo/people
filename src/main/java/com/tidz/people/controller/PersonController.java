@@ -54,4 +54,14 @@ public class PersonController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ApiResponse> deletePerson(@PathVariable("id") Long id) {
+        try {
+            service.delete(id);
+            return null;
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
+        }
+    }
 }
