@@ -10,6 +10,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -104,5 +105,19 @@ public class PersonControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.body.profession", Matchers.is("Engineer")));
 
         Mockito.verify(service, Mockito.times(1)).getPersonById(id);
+    }
+
+    @Test
+    void updatePersonShouldReturnAnErrorIfPersonIsNotFound() throws Exception {
+        Long id = 1L;
+        Mockito.when(service.update(Mockito.eq(id), Mockito.any(Person.class))).thenThrow(new ResourceNotFoundException("Person updated"));
+
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/people/{id}", id)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\": \"Mary Sue\", \"age\": 33, \"profession\": \"Architect\"}"))
+                .andExpect(MockMvcResultMatchers.status().isNotFound())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message", Matchers.equalTo("Person updated")));
+
+        Mockito.verify(service, Mockito.times(1)).update(Mockito.eq(id), Mockito.any(Person.class));
     }
 }
