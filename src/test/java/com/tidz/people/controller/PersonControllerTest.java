@@ -120,4 +120,21 @@ public class PersonControllerTest {
 
         Mockito.verify(service, Mockito.times(1)).update(Mockito.eq(id), Mockito.any(Person.class));
     }
+
+    @Test
+    void updatePersonShouldReturn200() throws Exception {
+        Person updatedPerson = new Person(1L, "John Doe", 30, "Engineer");
+        Mockito.when(service.update(Mockito.anyLong(), Mockito.any(Person.class))).thenReturn(updatedPerson);
+
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/people/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\": \"John Doe\", \"age\": 30, \"profession\": \"Engineer\"}"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message", Matchers.equalTo("Success")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.body.name", Matchers.equalTo(updatedPerson.getName())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.body.age", Matchers.is(30)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.body.profession", Matchers.equalTo("Engineer")));
+
+        Mockito.verify(service, Mockito.times(1)).update(Mockito.anyLong(), Mockito.any(Person.class));
+    }
 }
